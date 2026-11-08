@@ -160,7 +160,7 @@
   <section class="screen" id="s2">
     <div class="tag">Пункт 1 из 1</div>
     <h1>Предлагаю <em>гастрономическую экспедицию</em></h1>
-    <p>Проще говоря, ужин. Цель: проверить, правда ли там такие вкусные десерты, как говорят, и сможем ли мы проговорить дольше, чем длится сам ужин.</p>
+    <p>Проще говоря, ужин. Цель: найти самые вкусные десерты в городе и проверить, сможем ли мы проговорить дольше, чем длится сам ужин.</p>
     <p style="margin-top:18px;font-weight:700;color:var(--espresso)">Ты в деле?</p>
     <div class="choices" id="choices">
       <button class="btn" id="yes" onclick="sayYes()">Да</button>
@@ -190,8 +190,8 @@
       </div>
       <div class="t-perf"></div>
       <div class="t-bottom">
-        <div class="t-place">Coffee Boom<span>Roasters &amp; Bakery</span></div>
-        <div class="t-seal"><svg viewBox="0 0 24 24" fill="none" stroke="#3A2416" stroke-width="1.8" stroke-linecap="round"><ellipse cx="12" cy="12" rx="6.5" ry="9" transform="rotate(30 12 12)"/><path d="M9 5.5c3 3 3 10 6 13"/></svg></div>
+        <div class="t-place">Секретно 🤫<span>Место раскрою ближе к делу</span></div>
+        <div class="t-seal"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2.5"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/><path d="M12 15v2"/></svg></div>
       </div>
       <div class="t-notes"><span class="chip">🍽 ужин за мной</span><span class="chip">🍰 десерт обязателен</span><span class="chip">📵 скучать запрещено</span></div>
     </div>
@@ -295,7 +295,7 @@
   function fmtDate(v){ if(!v) return "дата на твой выбор"; const [y,m,d]=v.split('-').map(Number); return d+" "+months[m-1]; }
 
   function accept(){
-    message="Я в деле! 🍽 Встречаемся 8 ноября в 20:00 в Coffee Boom Roasters & Bakery." + (tries? `\n(P.S. Кнопку «Нет» пыталась нажать ${tries} ${raz(tries)} 😅)`:"");
+    message="Я в деле! 🍽 Встречаемся 8 ноября в 20:00. Жду, где будет секретное место 🤫" + (tries? `\n(P.S. Кнопку «Нет» пыталась нажать ${tries} ${raz(tries)} 😅)`:"");
     finish(); confetti();
   }
   function customTime(){
