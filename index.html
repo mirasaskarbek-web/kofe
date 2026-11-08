@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>У меня к тебе предложение ☕</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#F6EFE6; --paper:#FFFBF5; --espresso:#2B1B14; --mocha:#6B4A3A;
+    --caramel:#E0873A; --caramel-d:#C46E22; --foam:#EADCCB; --muted:#9A8577;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%}
+  body{
+    font-family:'Manrope',system-ui,sans-serif;color:var(--espresso);
+    background:radial-gradient(120% 80% at 50% 0%,#FBF4EA 0%,var(--cream) 55%,#EFE3D4 100%);
+    min-height:100dvh;display:flex;align-items:center;justify-content:center;
+    padding:max(24px,env(safe-area-inset-top)) 20px max(24px,env(safe-area-inset-bottom));
+    overflow-x:hidden;
+  }
+  /* мягкие кофейные зёрна на фоне */
+  .bean{position:fixed;z-index:0;width:46px;height:30px;border-radius:50%;background:var(--mocha);opacity:.07;pointer-events:none}
+  .bean::after{content:"";position:absolute;left:50%;top:15%;width:2px;height:70%;background:var(--cream);border-radius:2px;transform:translateX(-50%) rotate(8deg)}
+
+  .card{
+    width:100%;max-width:420px;background:var(--paper);border-radius:28px;
+    padding:36px 22px 28px;position:relative;z-index:1;
+    box-shadow:0 1px 0 rgba(255,255,255,.8) inset,0 30px 60px -20px rgba(43,27,20,.25),0 8px 20px -10px rgba(43,27,20,.15);
+  }
+  .screen{display:none;flex-direction:column;align-items:center;text-align:center;animation:in .55s cubic-bezier(.2,.8,.2,1)}
+  .screen.active{display:flex}
+  @keyframes in{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+  .tag{
+    font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--caramel-d);
+    background:#FBE9D8;padding:7px 12px;border-radius:999px;margin-bottom:22px
+  }
+  h1{font-family:'Unbounded',sans-serif;font-weight:700;font-size:26px;line-height:1.2;letter-spacing:-.01em;margin-bottom:14px}
+  h1 em{font-style:normal;color:var(--caramel)}
+  p{font-size:16px;line-height:1.55;color:var(--mocha)}
+  .small{font-size:13px;color:var(--muted);margin-top:14px}
+
+  .btn{
+    font-family:'Manrope',sans-serif;font-weight:700;font-size:16px;border:0;cursor:pointer;
+    border-radius:16px;padding:16px 22px;transition:transform .25s cubic-bezier(.2,.8,.2,1),background .2s,box-shadow .2s;
+    user-select:none;touch-action:manipulation
+  }
+  .btn:active{transform:scale(.97)}
+  .btn-main{background:var(--espresso);color:var(--paper);width:100%;box-shadow:0 10px 20px -10px rgba(43,27,20,.6)}
+  .btn-main:hover{background:#3d281e}
+  .btn-ghost{background:transparent;color:var(--mocha);width:100%;border:1.5px solid var(--foam)}
+  .btn-ghost:hover{border-color:var(--muted)}
+
+  /* кружка */
+  .cup{width:96px;height:96px;margin:4px 0 18px}
+  .steam path{stroke:var(--muted);stroke-width:3;fill:none;stroke-linecap:round;opacity:0;animation:steam 2.6s ease-in-out infinite}
+  .steam path:nth-child(2){animation-delay:.6s}.steam path:nth-child(3){animation-delay:1.2s}
+  @keyframes steam{0%{opacity:0;transform:translateY(6px)}40%{opacity:.7}100%{opacity:0;transform:translateY(-10px)}}
+
+  /* да / нет */
+  .choices{position:relative;width:100%;height:150px;margin-top:26px}
+  #yes{
+    position:absolute;left:0;top:0;width:calc(50% - 6px);
+    background:var(--caramel);color:#fff;box-shadow:0 12px 24px -10px rgba(224,135,58,.8);z-index:2
+  }
+  #yes:hover{background:var(--caramel-d)}
+  #no{
+    position:absolute;right:0;top:0;width:calc(50% - 6px);
+    background:var(--cream);color:var(--mocha);
+    transition:left .35s cubic-bezier(.3,1.4,.5,1),top .35s cubic-bezier(.3,1.4,.5,1),transform .25s,font-size .2s;
+    white-space:nowrap
+  }
+  .hint{font-size:13px;color:var(--muted);min-height:20px;margin-top:4px;transition:opacity .3s}
+
+  /* билет — в общей стилистике */
+  .ticket{width:100%;margin:22px 0;border-radius:22px;position:relative;overflow:hidden;text-align:left;
+    background:var(--cream);border:1.5px solid var(--foam);color:var(--espresso)}
+  .t-frame{display:none}
+  .gold{color:var(--espresso)}
+  .t-head{display:flex;justify-content:space-between;align-items:center;padding:20px 22px 0}
+  .t-mark{font-size:10px;letter-spacing:.24em;text-transform:uppercase;font-weight:700;color:var(--caramel-d)!important}
+  .t-no{white-space:nowrap;font-size:12px;color:var(--muted)}
+  .t-main{padding:16px 22px 20px}
+  .t-date{display:flex;align-items:center;gap:12px}
+  .t-day{font-family:'Unbounded',sans-serif;font-weight:500;font-size:44px;line-height:1;letter-spacing:-.02em}
+  .t-month b{display:block;font-family:'Unbounded',sans-serif;font-weight:500;font-size:17px;line-height:1.1}
+  .t-month span{display:block;font-size:13px;color:var(--muted);margin-top:4px}
+  .t-rule{height:1px;background:var(--foam);margin:16px 0}
+  .t-rule i{display:none}
+  .t-time{display:flex;justify-content:space-between;align-items:center}
+  .t-label{font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--muted)}
+  .t-clock{font-family:'Unbounded',sans-serif;font-weight:500;font-size:26px;line-height:1;text-align:right}
+  .t-sub{font-size:12px;color:var(--muted);text-align:right;margin-top:5px}
+  .t-perf{position:relative;border-top:1.5px dashed var(--foam);margin:0 16px}
+  .t-perf::before,.t-perf::after{content:"";position:absolute;top:-12px;width:22px;height:22px;border-radius:50%;background:var(--paper);border:1.5px solid var(--foam)}
+  .t-perf::before{left:-29px}.t-perf::after{right:-29px}
+  .t-bottom{padding:18px 22px 14px;display:flex;justify-content:space-between;align-items:center;gap:12px}
+  .t-place{font-family:'Unbounded',sans-serif;font-weight:500;font-size:18px;line-height:1.2}
+  .t-place span{display:block;font-family:'Manrope';font-size:13px;color:var(--muted);font-weight:500;margin-top:3px}
+  .t-seal{flex:none;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:#FBE9D8}
+  .t-seal svg{width:22px;height:22px}
+  .t-seal svg *{stroke:var(--caramel-d)}
+  .t-notes{display:flex;gap:6px;flex-wrap:wrap;padding:0 22px 20px}
+  .chip{font-size:12px;padding:6px 10px;border-radius:999px;color:var(--mocha);background:var(--paper);border:1px solid var(--foam)}
+
+  .stack{display:flex;flex-direction:column;gap:10px;width:100%}
+
+  /* форма */
+  .field{width:100%;text-align:left;margin-bottom:12px}
+  .field label{display:block;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+  .field input,.field textarea{
+    width:100%;font-family:'Manrope';font-size:16px;color:var(--espresso);background:var(--cream);
+    border:1.5px solid transparent;border-radius:14px;padding:14px;outline:none;transition:border .2s
+  }
+  .field input:focus,.field textarea:focus{border-color:var(--caramel)}
+  .field textarea{resize:none;height:76px}
+  .row{display:flex;gap:10px;width:100%}.row .field{flex:1}
+
+  /* финал */
+  .send{display:flex;align-items:center;justify-content:center;gap:10px;text-decoration:none}
+  .ig{background:linear-gradient(45deg,#F58529,#DD2A7B 55%,#8134AF);color:#fff;box-shadow:0 12px 24px -10px rgba(221,42,123,.6)}
+  .send svg{width:20px;height:20px;fill:#fff}
+  .summary{width:100%;background:var(--cream);border-radius:16px;padding:16px;margin:18px 0;text-align:left;font-size:15px;line-height:1.5;color:var(--espresso)}
+  .copied{font-size:13px;color:var(--caramel-d);height:18px;margin-top:6px}
+
+  #confetti{position:fixed;inset:0;pointer-events:none;z-index:50}
+  .progress{position:absolute;top:16px;left:50%;transform:translateX(-50%);display:flex;gap:6px}
+  .progress i{width:6px;height:6px;border-radius:50%;background:var(--foam);transition:all .3s}
+  .progress i.on{background:var(--caramel);width:18px;border-radius:4px}
+</style>
+</head>
+<body>
+<canvas id="confetti"></canvas>
+
+<div class="card">
+  <div class="progress"><i class="on"></i><i></i><i></i><i></i></div>
+
+  <!-- 1. Интро -->
+  <section class="screen active" id="s1">
+    <svg class="cup" viewBox="0 0 96 96" aria-hidden="true">
+      <g class="steam"><path d="M36 30c-4-6 4-9 0-16"/><path d="M48 30c-4-6 4-9 0-16"/><path d="M60 30c-4-6 4-9 0-16"/></g>
+      <path d="M22 40h48v22a18 18 0 0 1-18 18H40a18 18 0 0 1-18-18V40z" fill="#2B1B14"/>
+      <path d="M70 46h4a9 9 0 0 1 0 18h-5" stroke="#2B1B14" stroke-width="5" fill="none"/>
+      <ellipse cx="46" cy="40" rx="24" ry="4" fill="#E0873A"/>
+      <path d="M40 54c2-3 6-3 6 0 0-3 4-3 6 0 1 3-6 8-6 8s-7-5-6-8z" fill="#E0873A" opacity=".9"/>
+    </svg>
+    <div class="tag">Официальный документ · 1 экз.</div>
+    <h1>У меня к тебе<br><em>деловое предложение</em></h1>
+    <p>Спокойно, это не ипотека, не сетевой маркетинг и не просьба помочь с переездом.</p>
+    <div style="height:28px"></div>
+    <button class="btn btn-main" onclick="go(2)">Так, я заинтригована →</button>
+  </section>
+
+  <!-- 2. Вопрос -->
+  <section class="screen" id="s2">
+    <div class="tag">Пункт 1 из 1</div>
+    <h1>Предлагаю совместную <em>кофейную экспедицию</em></h1>
+    <p>Цель: выяснить, правда ли там лучший кофе в городе, и проверить, сможем ли мы проговорить дольше, чем остывает капучино.</p>
+    <p style="margin-top:18px;font-weight:700;color:var(--espresso)">Ты в деле?</p>
+    <div class="choices" id="choices">
+      <button class="btn" id="yes" onclick="sayYes()">Да</button>
+      <button class="btn" id="no">Нет</button>
+    </div>
+    <div class="hint" id="hint"></div>
+  </section>
+
+  <!-- 3. Детали -->
+  <section class="screen" id="s3">
+    <div class="tag">Протокол подписан ✓</div>
+    <h1>Отлично, <em>я так и знал</em></h1>
+    <p>Вот детали операции:</p>
+    <div class="ticket">
+      <div class="t-frame"></div>
+      <div class="t-head"><div class="t-mark">Приглашение</div><div class="t-no">№ 001 · лично тебе</div></div>
+      <div class="t-main">
+        <div class="t-date">
+          <div class="t-day gold">08</div>
+          <div class="t-month"><b>ноября</b><span>воскресенье</span></div>
+        </div>
+        <div class="t-rule"><i></i></div>
+        <div class="t-time">
+          <div><div class="t-label">Время</div></div>
+          <div><div class="t-clock gold">20:00</div><div class="t-sub">±5 минут на красоту</div></div>
+        </div>
+      </div>
+      <div class="t-perf"></div>
+      <div class="t-bottom">
+        <div class="t-place">Coffee Boom<span>Roasters &amp; Bakery</span></div>
+        <div class="t-seal"><svg viewBox="0 0 24 24" fill="none" stroke="#3A2416" stroke-width="1.8" stroke-linecap="round"><ellipse cx="12" cy="12" rx="6.5" ry="9" transform="rotate(30 12 12)"/><path d="M9 5.5c3 3 3 10 6 13"/></svg></div>
+      </div>
+      <div class="t-notes"><span class="chip">☕ кофе за мной</span><span class="chip">🥐 десерт обязателен</span><span class="chip">📵 скучать запрещено</span></div>
+    </div>
+    <div class="stack">
+      <button class="btn btn-main" onclick="accept()">Идеально, буду</button>
+      <button class="btn btn-ghost" onclick="go(4)">Давай в другое время</button>
+    </div>
+  </section>
+
+  <!-- 4. Своё время -->
+  <section class="screen" id="s4">
+    <div class="tag">Перенос без штрафов</div>
+    <h1>Выбирай, <em>как удобно</em></h1>
+    <p>Я подстроюсь. Кофе подождёт, я тоже.</p>
+    <div style="height:22px"></div>
+    <div class="row">
+      <div class="field"><label for="d">Дата</label><input type="date" id="d" value="2026-11-08" min="2026-11-07"></div>
+      <div class="field"><label for="t">Время</label><input type="time" id="t" value="20:00"></div>
+    </div>
+    <div class="field"><label for="n">Комментарий (по желанию)</label><textarea id="n" placeholder="Например: давай в другом месте или после 21:00"></textarea></div>
+    <div class="stack">
+      <button class="btn btn-main" onclick="customTime()">Предложить это время</button>
+      <button class="btn btn-ghost" onclick="go(3)">← Назад</button>
+    </div>
+  </section>
+
+  <!-- 5. Финал -->
+  <section class="screen" id="s5">
+    <div style="font-size:52px;line-height:1;margin-bottom:14px">🤝</div>
+    <div class="tag">Последний шаг</div>
+    <h1>Осталось <em>отправить ответ</em></h1>
+    <p>Нажми кнопку: ответ скопируется и откроется директ. Просто вставь его мне в сообщения 💌</p>
+    <div class="summary" id="summary"></div>
+    <div class="stack">
+      <a class="btn send ig" id="igBtn" href="https://ig.me/m/makke.off" target="_blank" rel="noopener" onclick="copyMsg()">
+        <svg viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0 8.2a3.2 3.2 0 1 1 0-6.4 3.2 3.2 0 0 1 0 6.4zM17.3 5.5a1.2 1.2 0 1 0 0 2.4 1.2 1.2 0 0 0 0-2.4zM21.9 7.9c-.1-1.6-.4-3-1.6-4.2S17.7 2.2 16.1 2.1C14.5 2 9.5 2 7.9 2.1 6.3 2.2 4.9 2.5 3.7 3.7S2.2 6.3 2.1 7.9C2 9.5 2 14.5 2.1 16.1c.1 1.6.4 3 1.6 4.2s2.6 1.5 4.2 1.6c1.6.1 6.6.1 8.2 0 1.6-.1 3-.4 4.2-1.6s1.5-2.6 1.6-4.2c.1-1.6.1-6.6 0-8.2zm-2.1 10a3.3 3.3 0 0 1-1.9 1.9c-1.3.5-4.3.4-5.9.4s-4.6.1-5.9-.4a3.3 3.3 0 0 1-1.9-1.9c-.5-1.3-.4-4.3-.4-5.9s-.1-4.6.4-5.9a3.3 3.3 0 0 1 1.9-1.9c1.3-.5 4.3-.4 5.9-.4s4.6-.1 5.9.4a3.3 3.3 0 0 1 1.9 1.9c.5 1.3.4 4.3.4 5.9s.1 4.6-.4 5.9z"/></svg>
+        Скопировать и открыть директ
+      </a>
+      <button class="btn btn-ghost" onclick="copyMsg()">Просто скопировать текст</button>
+    </div>
+    <div class="copied" id="copied"></div>
+  </section>
+</div>
+
+<script>
+  /* ====== НАСТРОЙКИ ====== */
+  const IG_USERNAME = "makke.off";  // ник в Instagram без @. Пусто = открывается список директа
+  /* ======================= */
+
+  // фоновые зёрна
+  for(let i=0;i<9;i++){const b=document.createElement('div');b.className='bean';
+    b.style.left=Math.random()*100+'vw';b.style.top=Math.random()*100+'vh';
+    b.style.transform=`rotate(${Math.random()*360}deg) scale(${.7+Math.random()*.8})`;document.body.appendChild(b)}
+
+  function go(n){
+    document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+    document.getElementById('s'+n).classList.add('active');
+    const step=Math.min(n,4);
+    document.querySelectorAll('.progress i').forEach((d,i)=>d.classList.toggle('on',i===step-1));
+  }
+
+  // кнопка «Нет», которая не нажимается
+  const noTexts=["Точно нет?","Подумай ещё 🤔","Там круассаны…","Кнопка сломалась","Это не та кнопка","Ну пожа-а-алуйста","Ошибка 404: «нет»","Попробуй левую 👈","Я же вижу, что да","Ладно, жми «Да» 🙂"];
+  const hints=["","Хм, кажется, промахнулась","Эта кнопка на техобслуживании","Интересно, сколько ты продержишься","Система не принимает отказы","Сопротивление бесполезно ☕"];
+  let tries=0;
+  const no=document.getElementById('no'), yes=document.getElementById('yes'), box=document.getElementById('choices');
+  function dodge(e){
+    e.preventDefault();e.stopPropagation();
+    tries++;
+    no.textContent=noTexts[(tries-1)%noTexts.length];
+    document.getElementById('hint').textContent=hints[Math.min(tries,hints.length-1)];
+    const W=box.clientWidth, H=box.clientHeight, w=no.offsetWidth, h=no.offsetHeight;
+    // прыгает, но не на «Да»
+    let x,y,guard=0;
+    do{ x=Math.random()*(W-w); y=Math.random()*(H-h); guard++; }
+    while(guard<30 && x<yes.offsetWidth+8 && y<yes.offsetHeight+8);
+    no.style.right='auto'; no.style.left=x+'px'; no.style.top=y+'px';
+    no.style.transform=`rotate(${(Math.random()*10-5).toFixed(1)}deg)`;
+    const s=Math.min(1+tries*0.05,1.35); yes.style.transform=`scale(${s})`; yes.style.transformOrigin='left top';
+    if(navigator.vibrate) try{navigator.vibrate(15)}catch(_){}
+  }
+  no.addEventListener('click',dodge);
+  no.addEventListener('touchstart',dodge,{passive:false});
+  no.addEventListener('mouseenter',e=>{ if(window.matchMedia('(hover:hover)').matches && tries>=2) dodge(e) });
+
+  function sayYes(){ confetti(); setTimeout(()=>go(3),450) }
+
+  // финальное сообщение
+  let message="";
+  const months=["января","февраля","марта","апреля","мая","июня","июля","августа","сентября","октября","ноября","декабря"];
+  function fmtDate(v){ if(!v) return "дата на твой выбор"; const [y,m,d]=v.split('-').map(Number); return d+" "+months[m-1]; }
+
+  function accept(){
+    message="Я в деле! ☕ Встречаемся 8 ноября в 20:00 в Coffee Boom Roasters & Bakery." + (tries? `\n(P.S. Кнопку «Нет» пыталась нажать ${tries} раз 😅)`:"");
+    finish(); confetti();
+  }
+  function customTime(){
+    const d=document.getElementById('d').value, t=document.getElementById('t').value||"", n=document.getElementById('n').value.trim();
+    message=`Я в деле! ☕ Но давай лучше ${fmtDate(d)}${t?" в "+t:""}.` + (n? `\nКомментарий: ${n}`:"") + (tries? `\n(P.S. Кнопку «Нет» пыталась нажать ${tries} раз 😅)`:"");
+    finish(); confetti();
+  }
+  function finish(){
+    document.getElementById('summary').textContent=message;
+    document.getElementById('igBtn').href = IG_USERNAME ? `https://ig.me/m/${IG_USERNAME}` : "https://www.instagram.com/direct/inbox/";
+    go(5);
+  }
+  async function copyMsg(){
+    const c=document.getElementById('copied');
+    try{ await navigator.clipboard.writeText(message); c.textContent="Скопировано! Теперь вставь мне в директ 💌"; }
+    catch(_){ c.textContent="Не вышло скопировать: выдели текст выше вручную"; }
+  }
+
+  // конфетти
+  const cv=document.getElementById('confetti'), cx=cv.getContext('2d'); let parts=[], raf=null;
+  function resize(){cv.width=innerWidth*devicePixelRatio;cv.height=innerHeight*devicePixelRatio;cx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0)}
+  resize(); addEventListener('resize',resize);
+  function confetti(){
+    const cols=['#E0873A','#2B1B14','#6B4A3A','#F2C38F','#EADCCB'];
+    for(let i=0;i<120;i++) parts.push({x:innerWidth/2,y:innerHeight*0.45,vx:(Math.random()-.5)*14,vy:Math.random()*-14-4,
+      r:Math.random()*6+4,c:cols[i%cols.length],a:Math.random()*6,va:(Math.random()-.5)*.3,life:0,bean:Math.random()<.3});
+    if(!raf) loop();
+  }
+  function loop(){
+    cx.clearRect(0,0,innerWidth,innerHeight);
+    parts.forEach(p=>{p.vy+=.35;p.vx*=.99;p.x+=p.vx;p.y+=p.vy;p.a+=p.va;p.life++;
+      cx.save();cx.translate(p.x,p.y);cx.rotate(p.a);cx.fillStyle=p.c;
+      if(p.bean){cx.beginPath();cx.ellipse(0,0,p.r,p.r*.65,0,0,Math.PI*2);cx.fill();}
+      else cx.fillRect(-p.r/2,-p.r/4,p.r,p.r/2);
+      cx.restore();});
+    parts=parts.filter(p=>p.y<innerHeight+40&&p.life<260);
+    raf=parts.length?requestAnimationFrame(loop):(cx.clearRect(0,0,innerWidth,innerHeight),null);
+  }
+</script>
+</body>
+</html>
