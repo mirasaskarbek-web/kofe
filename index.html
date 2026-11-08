@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>У меня к тебе предложение ☕</title>
+<title>У меня к тебе предложение 🍽</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
@@ -123,6 +123,8 @@
   .ig{background:linear-gradient(45deg,#F58529,#DD2A7B 55%,#8134AF);color:#fff;box-shadow:0 12px 24px -10px rgba(221,42,123,.6)}
   .send svg{width:20px;height:20px;fill:#fff}
   .summary{width:100%;background:var(--cream);border-radius:16px;padding:16px;margin:18px 0;text-align:left;font-size:15px;line-height:1.5;color:var(--espresso)}
+  .sent{font-size:13px;font-weight:700;color:var(--muted);margin-top:14px}
+  .sent.ok{color:#3E8E5A}.sent.err{color:var(--caramel-d)}
   .copied{font-size:13px;color:var(--caramel-d);height:18px;margin-top:6px}
 
   #confetti{position:fixed;inset:0;pointer-events:none;z-index:50}
@@ -140,11 +142,12 @@
   <!-- 1. Интро -->
   <section class="screen active" id="s1">
     <svg class="cup" viewBox="0 0 96 96" aria-hidden="true">
-      <g class="steam"><path d="M36 30c-4-6 4-9 0-16"/><path d="M48 30c-4-6 4-9 0-16"/><path d="M60 30c-4-6 4-9 0-16"/></g>
-      <path d="M22 40h48v22a18 18 0 0 1-18 18H40a18 18 0 0 1-18-18V40z" fill="#2B1B14"/>
-      <path d="M70 46h4a9 9 0 0 1 0 18h-5" stroke="#2B1B14" stroke-width="5" fill="none"/>
-      <ellipse cx="46" cy="40" rx="24" ry="4" fill="#E0873A"/>
-      <path d="M40 54c2-3 6-3 6 0 0-3 4-3 6 0 1 3-6 8-6 8s-7-5-6-8z" fill="#E0873A" opacity=".9"/>
+      <g class="steam"><path d="M38 28c-4-6 4-9 0-16"/><path d="M48 28c-4-6 4-9 0-16"/><path d="M58 28c-4-6 4-9 0-16"/></g>
+      <circle cx="48" cy="60" r="24" fill="#2B1B14"/>
+      <circle cx="48" cy="60" r="16" fill="none" stroke="#E0873A" stroke-width="2.5"/>
+      <path d="M48 66c-5-3.5-8-6-8-9a4 4 0 0 1 8-1 4 4 0 0 1 8 1c0 3-3 5.5-8 9z" fill="#E0873A"/>
+      <path d="M12 40v12a4 4 0 0 0 4 4v20M16 40v12M20 40v12a4 4 0 0 1-4 4" stroke="#2B1B14" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <path d="M80 76V40c4 2 6 8 6 16h-6" stroke="#2B1B14" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>
     <div class="tag">Официальный документ · 1 экз.</div>
     <h1>У меня к тебе<br><em>деловое предложение</em></h1>
@@ -156,8 +159,8 @@
   <!-- 2. Вопрос -->
   <section class="screen" id="s2">
     <div class="tag">Пункт 1 из 1</div>
-    <h1>Предлагаю совместную <em>кофейную экспедицию</em></h1>
-    <p>Цель: выяснить, правда ли там лучший кофе в городе, и проверить, сможем ли мы проговорить дольше, чем остывает капучино.</p>
+    <h1>Предлагаю <em>гастрономическую экспедицию</em></h1>
+    <p>Проще говоря, ужин. Цель: проверить, правда ли там такие вкусные десерты, как говорят, и сможем ли мы проговорить дольше, чем длится сам ужин.</p>
     <p style="margin-top:18px;font-weight:700;color:var(--espresso)">Ты в деле?</p>
     <div class="choices" id="choices">
       <button class="btn" id="yes" onclick="sayYes()">Да</button>
@@ -190,7 +193,7 @@
         <div class="t-place">Coffee Boom<span>Roasters &amp; Bakery</span></div>
         <div class="t-seal"><svg viewBox="0 0 24 24" fill="none" stroke="#3A2416" stroke-width="1.8" stroke-linecap="round"><ellipse cx="12" cy="12" rx="6.5" ry="9" transform="rotate(30 12 12)"/><path d="M9 5.5c3 3 3 10 6 13"/></svg></div>
       </div>
-      <div class="t-notes"><span class="chip">☕ кофе за мной</span><span class="chip">🥐 десерт обязателен</span><span class="chip">📵 скучать запрещено</span></div>
+      <div class="t-notes"><span class="chip">🍽 ужин за мной</span><span class="chip">🍰 десерт обязателен</span><span class="chip">📵 скучать запрещено</span></div>
     </div>
     <div class="stack">
       <button class="btn btn-main" onclick="accept()">Идеально, буду</button>
@@ -202,7 +205,7 @@
   <section class="screen" id="s4">
     <div class="tag">Перенос без штрафов</div>
     <h1>Выбирай, <em>как удобно</em></h1>
-    <p>Я подстроюсь. Кофе подождёт, я тоже.</p>
+    <p>Я подстроюсь. Ужин подождёт, я тоже.</p>
     <div style="height:22px"></div>
     <div class="row">
       <div class="field"><label for="d">Дата</label><input type="date" id="d" value="2026-11-08" min="2026-11-07"></div>
@@ -218,16 +221,17 @@
   <!-- 5. Финал -->
   <section class="screen" id="s5">
     <div style="font-size:52px;line-height:1;margin-bottom:14px">🤝</div>
-    <div class="tag">Последний шаг</div>
-    <h1>Осталось <em>отправить ответ</em></h1>
-    <p>Нажми кнопку: ответ скопируется и откроется директ. Просто вставь его мне в сообщения 💌</p>
+    <div class="tag">Договорились ✓</div>
+    <h1>Ответ <em>уже у меня</em></h1>
+    <p>Можешь ничего не отправлять, я всё получил. До встречи 🙂</p>
+    <div class="sent" id="sent">Отправляю…</div>
     <div class="summary" id="summary"></div>
     <div class="stack">
       <a class="btn send ig" id="igBtn" href="https://ig.me/m/makke.off" target="_blank" rel="noopener" onclick="copyMsg()">
         <svg viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0 8.2a3.2 3.2 0 1 1 0-6.4 3.2 3.2 0 0 1 0 6.4zM17.3 5.5a1.2 1.2 0 1 0 0 2.4 1.2 1.2 0 0 0 0-2.4zM21.9 7.9c-.1-1.6-.4-3-1.6-4.2S17.7 2.2 16.1 2.1C14.5 2 9.5 2 7.9 2.1 6.3 2.2 4.9 2.5 3.7 3.7S2.2 6.3 2.1 7.9C2 9.5 2 14.5 2.1 16.1c.1 1.6.4 3 1.6 4.2s2.6 1.5 4.2 1.6c1.6.1 6.6.1 8.2 0 1.6-.1 3-.4 4.2-1.6s1.5-2.6 1.6-4.2c.1-1.6.1-6.6 0-8.2zm-2.1 10a3.3 3.3 0 0 1-1.9 1.9c-1.3.5-4.3.4-5.9.4s-4.6.1-5.9-.4a3.3 3.3 0 0 1-1.9-1.9c-.5-1.3-.4-4.3-.4-5.9s-.1-4.6.4-5.9a3.3 3.3 0 0 1 1.9-1.9c1.3-.5 4.3-.4 5.9-.4s4.6-.1 5.9.4a3.3 3.3 0 0 1 1.9 1.9c.5 1.3.4 4.3.4 5.9s.1 4.6-.4 5.9z"/></svg>
-        Скопировать и открыть директ
+        Написать мне в директ
       </a>
-      <button class="btn btn-ghost" onclick="copyMsg()">Просто скопировать текст</button>
+      
     </div>
     <div class="copied" id="copied"></div>
   </section>
@@ -236,7 +240,16 @@
 <script>
   /* ====== НАСТРОЙКИ ====== */
   const IG_USERNAME = "makke.off";  // ник в Instagram без @. Пусто = открывается список директа
+  const NTFY_TOPIC = "makke-uzhin-k7q2x9fz"; // уведомления: приложение ntfy, подписка на эту тему
   /* ======================= */
+
+  function raz(n){const a=n%10,b=n%100;return (a>=2&&a<=4&&(b<12||b>14))?"раза":"раз"}
+  function notify(text){
+    const url="https://ntfy.sh/"+NTFY_TOPIC;
+    try{ if(navigator.sendBeacon && navigator.sendBeacon(url,new Blob([text],{type:"text/plain"}))) return Promise.resolve(true); }catch(_){}
+    return fetch(url,{method:"POST",body:text,mode:"no-cors",keepalive:true}).then(()=>true).catch(()=>false);
+  }
+  notify("👀 Она открыла приглашение");
 
   // фоновые зёрна
   for(let i=0;i<9;i++){const b=document.createElement('div');b.className='bean';
@@ -252,7 +265,7 @@
 
   // кнопка «Нет», которая не нажимается
   const noTexts=["Точно нет?","Подумай ещё 🤔","Там круассаны…","Кнопка сломалась","Это не та кнопка","Ну пожа-а-алуйста","Ошибка 404: «нет»","Попробуй левую 👈","Я же вижу, что да","Ладно, жми «Да» 🙂"];
-  const hints=["","Хм, кажется, промахнулась","Эта кнопка на техобслуживании","Интересно, сколько ты продержишься","Система не принимает отказы","Сопротивление бесполезно ☕"];
+  const hints=["","Хм, кажется, промахнулась","Эта кнопка на техобслуживании","Интересно, сколько ты продержишься","Система не принимает отказы","Сопротивление бесполезно 🍽"];
   let tries=0;
   const no=document.getElementById('no'), yes=document.getElementById('yes'), box=document.getElementById('choices');
   function dodge(e){
@@ -274,7 +287,7 @@
   no.addEventListener('touchstart',dodge,{passive:false});
   no.addEventListener('mouseenter',e=>{ if(window.matchMedia('(hover:hover)').matches && tries>=2) dodge(e) });
 
-  function sayYes(){ confetti(); setTimeout(()=>go(3),450) }
+  function sayYes(){ notify("✅ Нажала «Да»"+(tries?` (до этого пыталась нажать «Нет» ${tries} ${raz(tries)})`:"")); confetti(); setTimeout(()=>go(3),450) }
 
   // финальное сообщение
   let message="";
@@ -282,18 +295,23 @@
   function fmtDate(v){ if(!v) return "дата на твой выбор"; const [y,m,d]=v.split('-').map(Number); return d+" "+months[m-1]; }
 
   function accept(){
-    message="Я в деле! ☕ Встречаемся 8 ноября в 20:00 в Coffee Boom Roasters & Bakery." + (tries? `\n(P.S. Кнопку «Нет» пыталась нажать ${tries} раз 😅)`:"");
+    message="Я в деле! 🍽 Встречаемся 8 ноября в 20:00 в Coffee Boom Roasters & Bakery." + (tries? `\n(P.S. Кнопку «Нет» пыталась нажать ${tries} ${raz(tries)} 😅)`:"");
     finish(); confetti();
   }
   function customTime(){
     const d=document.getElementById('d').value, t=document.getElementById('t').value||"", n=document.getElementById('n').value.trim();
-    message=`Я в деле! ☕ Но давай лучше ${fmtDate(d)}${t?" в "+t:""}.` + (n? `\nКомментарий: ${n}`:"") + (tries? `\n(P.S. Кнопку «Нет» пыталась нажать ${tries} раз 😅)`:"");
+    message=`Я в деле! 🍽 Но давай лучше ${fmtDate(d)}${t?" в "+t:""}.` + (n? `\nКомментарий: ${n}`:"") + (tries? `\n(P.S. Кнопку «Нет» пыталась нажать ${tries} ${raz(tries)} 😅)`:"");
     finish(); confetti();
   }
   function finish(){
     document.getElementById('summary').textContent=message;
     document.getElementById('igBtn').href = IG_USERNAME ? `https://ig.me/m/${IG_USERNAME}` : "https://www.instagram.com/direct/inbox/";
     go(5);
+    const st=document.getElementById('sent');
+    notify("💌 Её ответ:\n"+message).then(ok=>{
+      if(ok){ st.textContent="Ответ отправлен ✓"; st.className="sent ok"; }
+      else { st.textContent="Не получилось отправить автоматически, напиши мне в директ 👇"; st.className="sent err"; }
+    });
   }
   async function copyMsg(){
     const c=document.getElementById('copied');
